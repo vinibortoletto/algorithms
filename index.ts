@@ -42,6 +42,16 @@ const accelerateProton = (matrix: TMatrix, particle: string): TMatrix => {
   return newMatrix;
 };
 
+const accelerateNeutron = (matrix: TMatrix, particle: string): TMatrix => {
+  const newMatrix = deepCopyObject(matrix);
+
+  newMatrix.forEach((_, i) => {
+    newMatrix[0][i] = particle;
+  });
+
+  return newMatrix;
+};
+
 const cyclotron = (particle: string, matrix: TMatrix): TMatrix => {
   if (particle === "e") {
     return accelerateElectron(matrix, particle);
@@ -49,6 +59,10 @@ const cyclotron = (particle: string, matrix: TMatrix): TMatrix => {
 
   if (particle === "p") {
     return accelerateProton(matrix, particle);
+  }
+
+  if (particle === "n") {
+    return accelerateNeutron(matrix, particle);
   }
 
   return matrix;
@@ -63,6 +77,8 @@ const matrixExample = [
 
 const electron = cyclotron("e", matrixExample);
 const proton = cyclotron("p", matrixExample);
+const neutron = cyclotron("n", matrixExample);
 
 console.log("electron: ", electron);
 console.log("proton: ", proton);
+console.log("neutron: ", neutron);
