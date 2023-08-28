@@ -1,3 +1,5 @@
+const generateMatrix = require("./generateMatrix");
+
 type TMatrix = (number | string)[][];
 
 const deepCopyObject = <T>(object: T): T => {
@@ -31,12 +33,12 @@ const accelerateProton = (matrix: TMatrix, particle: string): TMatrix => {
     newMatrix[lastIndex - 1][i] = particle;
 
     if (i > 0 && i < newMatrix.length - 2) {
-      newMatrix[lastIndex - 1][i] = 1;
+      newMatrix[lastIndex - 1][i] = "1";
     }
 
     // last line
     newMatrix[lastIndex][i] = particle;
-    newMatrix[lastIndex][lastIndex] = 1;
+    newMatrix[lastIndex][lastIndex] = "1";
   });
 
   return newMatrix;
@@ -52,7 +54,11 @@ const accelerateNeutron = (matrix: TMatrix, particle: string): TMatrix => {
   return newMatrix;
 };
 
-const cyclotron = (particle: string, matrix: TMatrix): TMatrix => {
+const cyclotron = (particle: string, matrixSize: number): TMatrix | string => {
+  if (matrixSize < 4) return "Matrix should be at least 4x4";
+
+  const matrix: TMatrix = generateMatrix(matrixSize);
+
   if (particle === "e") {
     return accelerateElectron(matrix, particle);
   }
@@ -68,17 +74,12 @@ const cyclotron = (particle: string, matrix: TMatrix): TMatrix => {
   return matrix;
 };
 
-const matrixExample = [
-  [1, 1, 1, 1],
-  [1, 1, 1, 1],
-  [1, 1, 1, 1],
-  [1, 1, 1, 1],
-];
-
-const electron = cyclotron("e", matrixExample);
-const proton = cyclotron("p", matrixExample);
-const neutron = cyclotron("n", matrixExample);
+const electron = cyclotron("e", 4);
+const proton = cyclotron("p", 4);
+const neutron = cyclotron("n", 4);
+const error = cyclotron("x", 3);
 
 console.log("electron: ", electron);
 console.log("proton: ", proton);
 console.log("neutron: ", neutron);
+console.log("error: ", error);
